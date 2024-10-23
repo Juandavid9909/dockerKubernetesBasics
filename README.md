@@ -174,3 +174,13 @@ services:
 | Listar proyectos corriendo | `docker compose ls` |
 | Copiar archivos desde el contenedor | `docker compose cp <containerId>:<path> <localPath>` |
 | Copiar archivos desde el host | `docker compose cp <localPath> <containerId>:<path>` |
+
+
+## Publicar en Docker Hub
+
+| | Comando |
+|--|--|
+| Autenticarse en Docker Hub | `docker login -u <username> -p <password>` |
+| Agregar tag a imagen previamente construida | `docker tag <imageName> <username>/<imageName>:<tag>` |
+| Publicar imagen en Docker Hub | `docker push <username>/<imageName>:<tag>` |
+| Descargar imagen en Docker Hub | `docker pull <username>/<imageName>:<tag>` |
