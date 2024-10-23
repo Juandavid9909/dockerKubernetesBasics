@@ -20,4 +20,6 @@ Code.GlobalUsings.g.cs
 Code.RazorAssemblyInfo.cache
 Code.RazorAssemblyInfo.cs
 project.razor.json
+
 node_modules/
+.vscode/
