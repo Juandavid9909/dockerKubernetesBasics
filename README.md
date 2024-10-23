@@ -184,3 +184,107 @@ services:
 | Agregar tag a imagen previamente construida | `docker tag <imageName> <username>/<imageName>:<tag>` |
 | Publicar imagen en Docker Hub | `docker push <username>/<imageName>:<tag>` |
 | Descargar imagen en Docker Hub | `docker pull <username>/<imageName>:<tag>` |
+
+
+# Kubernetes (K8s)
+
+- Es la herramienta de orquestación de contenedores más popular.
+- Es un sistema de contenedores que se ejecuta en una o más máquinas.
+- Permite el balanceo de carga y la escalabilidad.
+- Rollouts y rollbacks automatizados.
+- Administración de configuración y secretos.
+- Usa la misma API a través de on-premises y en la nube.
+
+
+## ¿Qué no puede hacer K8s?
+
+- No despliega el código fuente.
+- No construye nuestra aplicación.
+- No provee servicios de nivel de aplicación.
+
+Cada contenedor se ejecuta en un pod, cada pod se ejecuta en un nodo, y cada nodo se ejecuta en un cluster.
+
+
+## Contexto
+
+- Un contexto es un grupo de parámetros de acceso a un cluster K8s.
+- Contiene un cluster de Kubernetes, un usuario y un namespace.
+- El contexto actual es el cluster que está actualmente por defecto para kubectl.
+
+| | Comando |
+|--|--|
+| Obtener el contexto actual | `kubectl config current-context` |
+| Listar todos los contextos | `kubectl config get-contexts` |
+| Setear el contexto actual | `kubectl config use-context <contextName>` |
+| Eliminar un contexto desde el archivo de configuración | `kubectl config delete-context <contextName>` |
+| Renombrar contexto | `kubectl config rename-context <oldContextName> <newContextName>` |
+
+
+## Modo imperativo vs modo declarativo
+
+- Imperativo:
+  - Usando comandos de kubectl, toca escribir muchos comandos para generar los recursos.
+  - Bueno para el aprendizaje, testing y debug.
+  - Es como programar.
+- Declarativo:
+  - Usando un archivo de configuración, se generan los recursos.
+  - Bueno para la producción.
+  - Es como configurar un sistema.
+
+### Ejemplo imperativo
+```bash
+kubectl run mynginx --image=nginx --port=80
+
+kubectl create deploy mynginx --image=nginx --port=80 --replicas=3
+
+kubectl create service nodeport myservice --targetPort=8080
+
+kubectl delete pod nginx
+```
+
+### Ejemplo declarativo
+
+```yaml
+apiVersion: v1
+
+kind: Pod
+metadata:
+  name: myapp-pod
+  labels:
+    app: myapp
+    type: front-end
+spec:
+  containers:
+    - name: myapp-container
+      image: nginx
+```
+
+- **apiVersion:** Versión de la especificación de kubernetes.
+- **kind:** Tipo de recurso.
+- **metadata.name:** Nombre único del objeto.
+- **metadata.namespace:** Espacio de nombres del recurso.
+- **spec:** Especificación del recurso.
+
+
+## Ejemplo de despliegue
+
+Para este ejemplo se utiliza el archivo en la carpeta 04_kubernetesBasics.
+
+### Imperativo
+```bash
+kubectl create deployment mynginx1 --image=nginx
+
+kubectl get deploy
+```
+
+### Declarativo
+```bash
+kubectl create -f ./04_kubernetesBasics/deploy-example.yaml
+```
+
+### Limpiar despliegues
+```bash
+kubectl delete deployment mynginx1
+
+kubectl delete deploy mynginx2
+```
