@@ -358,3 +358,39 @@ spec:
     limits.cpu: "5"
     limites.memory: 10Gi
 ```
+
+
+## Nodos
+
+Son máquinas físicas o virtuales que ejecutan un cluster K8s. Estas pueden tener pods, kube-proxies, kubelets y runtimes de los contenedores.
+
+| | Comando |
+|--|--|
+| Listar nodos | `kubectl get nodes` |
+| Listar nodos con su ip | `kubectl get nodes -o wide` |
+| Ver detalles de todos los nodos | `kubectl describe node` |
+| Ver detalles de un nodo | `kubectl describe node <nodeName>` |
+
+### kubelet
+- Administra el ciclo de vida de los pods.
+- Se asegura de que los contenedores descritos en el pod estén corriendo y están en el estado correcto.
+
+### kube-proxy
+- Un proxy de red.
+- Administra las reglas de red en los nodos.
+
+### Runtime de contenedores
+- K8s soporta muchos runtimes de contenedores.
+- Se debe implementar la interfaz del runtime de contenedores de Kubernetes.
+  - Moby.
+  - Containerd.
+  - Cri-0.
+  - Rkt.
+  - Kata.
+  - Virtlet.
+
+### Node pool
+- Es un grupo de máquinas virtuales, todas del mismo tamaño.
+- Un cluster puede tener múltiples node pools.
+  - Estos node pools pueden hostear diferentes tamaños de máquinas virtuales.
+  - Cada node pool puede ser autoescalado de forma independiente respecto a los otros node pools.
