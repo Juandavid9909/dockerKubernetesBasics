@@ -288,3 +288,73 @@ kubectl delete deployment mynginx1
 
 kubectl delete deploy mynginx2
 ```
+
+
+## Namespaces
+
+- Nos permite agrupar recursos, por ejemplo dev, test y prod.
+- K8s crea un namespace por defecto.
+- Los objetos en un namespace pueden acceder a objetos en un namespace diferente.
+  - Ejemplo: objectname.prod.svc.cluster.local
+- Al eliminar un namespace se eliminarán todos sus objetos hijos.
+
+| | Comando |
+|--|--|
+| Listar todos los namespaces | `kubectl get namespace` |
+| Versión corta | `kubectl get ns` |
+| Configurar el contexto actual para usar un namespace | `kubectl config set-context --current --namespace=<namespaceName>` |
+| Crear un namespace | `kubectl credelete ns <namespaceName>` |
+| Listar todos los pods en todos los namespaces | `kubectl get pods --all-namespaces` |
+| Listar todos los pods en un namespace | `kubectl get pods --namespace=<namespaceName>` |
+
+### Definir un namespace
+```yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: prod
+```
+
+### Definir un pod en un namespace
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp-pod
+  namespace: prod
+spec:
+  containers:
+  - name: nginx-container
+    image: nginx
+```
+
+Al hacer esto nuestro pod vivirá en el namespace prod.
+
+### Definir una política de rápidamente
+```yaml
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  namespace: clientb
+  name: deny-from-other-namespaces
+spec:
+  podSelector:
+    matchLabels:
+  ingress:
+  - from:
+    - podSelector: {}
+```
+
+### Definir una quota de recurso
+```yaml
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: compute-quota
+  namespace: prod
+spec:
+  hard:
+    pods: "10"
+    limits.cpu: "5"
+    limites.memory: 10Gi
+```
